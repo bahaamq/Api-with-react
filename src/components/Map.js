@@ -16,7 +16,9 @@ class Map extends React.Component{
        lon:0,
        showName:'',
 
-       show:false
+       show:false,
+       showMapImg:false,
+errorMsg:false   
 
         }
       }
@@ -31,6 +33,13 @@ address:locationData
    console.log(this.state.address)
 }
 
+showMap=(e)=>{
+  e.preventDefault();
+    this.setState({
+      showMapImg:true
+    })   
+
+  }
 
 
 sendData=async(e)=>{
@@ -42,9 +51,10 @@ sendData=async(e)=>{
 let response = await axios.get(url);
 response=response.data[0]
 console.log(response)
+
 this.setState({
 low:response.lat,
-long:response.lon,
+lon:response.lon,
 showName:response.display_name,
 show:true
        })
@@ -53,8 +63,11 @@ show:true
     catch
     {
     console.log('sasd');
-    }
-}
+    this.setState({
+errorMsg:true
+    })
+    }}
+
 
 
 
@@ -71,7 +84,13 @@ show:true
   <Button variant="primary" type="submit" onClick={this.sendData}>
     Submit
   </Button>
+
+  <Button variant="primary" type="submit" onClick={this.showMap}>
+  Show location
+  </Button>
+
 </Form>
+
 
 
 {this.state.show &&<Card>
@@ -82,6 +101,23 @@ show:true
 </Card>
       }
 
+<Card>
+
+{this.state.showMapImg &&  <img src={`https://maps.locationiq.com/v3/staticmap?key=f5de8e48adbdc6&center=$${this.state.low},${this.state.lon} `} alt='' />
+      }
+
+
+      </Card>
+      {this.state.errorMsg &&
+      <Card border="warning" style={{ width: '18rem' }}>
+    <Card.Header>Warning</Card.Header>
+      <Card.Body > 
+        Please enter a valid address 
+
+      </Card.Body>
+
+      </Card>
+      }
 </>
         )}}
 
