@@ -18,7 +18,9 @@ class Map extends React.Component{
 
        show:false,
        showMapImg:false,
-errorMsg:false   
+errorMsg:false   ,
+weatherDesc:[],
+
 
         }
       }
@@ -45,19 +47,52 @@ showMap=(e)=>{
 sendData=async(e)=>{
 
     e.preventDefault();
-    const url = `https://eu1.locationiq.com/v1/search.php?key=pk.dbf5d5b259fbe4ebcf2f14e515cb2688&q=${this.state.address}&format=json`
+
 
     try{
+      const url = `https://eu1.locationiq.com/v1/search.php?key=pk.dbf5d5b259fbe4ebcf2f14e515cb2688&q=${this.state.address}&format=json`
+
 let response = await axios.get(url);
+
 response=response.data[0]
 console.log(response)
 
 this.setState({
 low:response.lat,
 lon:response.lon,
-showName:response.display_name,
+showName:response.display_name.split(" ")[0].slice(0, -1),
+
 show:true
        })
+
+
+      
+       const apiUrl=`http://localhost:3001/weather?low=${this.state.low}&lon=${this.state.lon}&searchQuery=${this.state.showName}`;
+
+       let myreq= await axios.get(apiUrl)
+       let dates= myreq.data.data
+ 
+  let newArr=[]
+       dates.forEach((item)=> {
+
+newArr.push({
+  description: item.weather.description,
+  date:  item.valid_date
+});
+       })
+
+       console.log(newArr)
+       this.setstate ({
+         
+      weatherDesc:  { newArr }
+      
+      
+      })
+
+      //  this.setState({
+      //   weatherDesc:newArr
+      //       })
+      
     }
 
     catch
@@ -72,7 +107,10 @@ errorMsg:true
 
 
       render(){
-
+if(! this.state.weatherDesc)
+{
+  return <p>No Date</p>
+}
         return(
 <>
 <Form>
@@ -118,6 +156,48 @@ errorMsg:true
 
       </Card>
       }
+
+
+
+  {/* <div>
+    {this.state.weatherDesc.map((item) => (
+        <p>Hello, {item.description} from {item.date}!</p>
+    ))}
+    </div> */}
+
+
+    <div>
+
+<p>
+
+</p>
+      
+        
+
+        
+    </div>
+
+{/* {this.state.show &&<Card border="warning" style={{ width: '18rem' }}>
+    <Card.Header>info</Card.Header>
+    
+      <Card.Body> 
+     <p>{this.state.weatherDesc.date}</p>
+      </Card.Body>
+
+      </Card>
+      } */}
+
+{/* 
+{this.state.show &&
+  <ul>
+        {this.state.weatherDesc.map(item => {
+          return <li>{item[0]}</li>;
+        })}
+      </ul>
+      } */}
+
+
+
 </>
         )}}
 
