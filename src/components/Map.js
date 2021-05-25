@@ -70,8 +70,9 @@ show:true
 
     try
     {
-      
-      const apiUrl=`http://172.29.244.147:3001/weather?low=${this.state.low}&lon=${this.state.lon}&searchQuery=${this.state.showName}`;
+      const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+      const apiUrl=`${BASE_URL}weather?low=${this.state.low}&lon=${this.state.lon}&searchQuery=${this.state.showName}`;
 
       let myreq= await axios.get(apiUrl)
        this.setState({
@@ -82,6 +83,7 @@ show:true
           }
           catch
           {
+            console.log('err')
 
           }
     }
@@ -128,8 +130,14 @@ if(! this.state.weatherDesc)
   <Card.Body>Address : {this.state.showName} </Card.Body>
 
 </Card>
+
+
       }
 
+<Weather
+date={this.state.weatherDesc}
+/>
+     
 <Card>
 
 {this.state.showMapImg &&  <img src={`https://maps.locationiq.com/v3/staticmap?key=f5de8e48adbdc6&center=$${this.state.low},${this.state.lon} `} alt='' />
@@ -157,9 +165,7 @@ if(! this.state.weatherDesc)
     </div> */}
 
 
-<Weather
-date={this.state.weatherDesc}
-/>
+
 
 {/* {this.state.show &&<Card border="warning" style={{ width: '18rem' }}>
     <Card.Header>info</Card.Header>
