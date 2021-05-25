@@ -70,10 +70,10 @@ show:true
 
     try
     {
-      const BASE_URL = process.env.REACT_APP_BASE_URL;
+      let BASE_URL = process.env.REACT_APP_SERVER;
 
-      const apiUrl=`${BASE_URL}weather?low=${this.state.low}&lon=${this.state.lon}&searchQuery=${this.state.showName}`;
-
+      const apiUrl=`${BASE_URL}/weather?low=${this.state.low}&lon=${this.state.lon}&searchQuery=${this.state.showName}`;
+console.log(apiUrl)
       let myreq= await axios.get(apiUrl)
        this.setState({
         weatherDesc:myreq.data
