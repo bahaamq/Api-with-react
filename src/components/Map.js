@@ -67,32 +67,23 @@ show:true
 
 
       
-       const apiUrl=`http://localhost:3001/weather?low=${this.state.low}&lon=${this.state.lon}&searchQuery=${this.state.showName}`;
 
-       let myreq= await axios.get(apiUrl)
-       let dates= myreq.data.data
- 
-  let newArr=[]
-       dates.forEach((item)=> {
-
-newArr.push({
-  description: item.weather.description,
-  date:  item.valid_date
-});
-       })
-
-       console.log(newArr)
-       this.setstate ({
-         
-      weatherDesc:  { newArr }
+    try
+    {
       
-      
-      })
+      const apiUrl=`http://172.29.244.147:3001/weather?low=${this.state.low}&lon=${this.state.lon}&searchQuery=${this.state.showName}`;
 
-      //  this.setState({
-      //   weatherDesc:newArr
-      //       })
-      
+      let myreq= await axios.get(apiUrl)
+       this.setState({
+        weatherDesc:myreq.data
+            })
+
+            console.log(this.state.weatherDesc[0])
+          }
+          catch
+          {
+
+          }
     }
 
     catch
