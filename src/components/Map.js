@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Card from 'react-bootstrap/Card'
-
+import Weather from './Weather.js'
 class Map extends React.Component{
 
     constructor(props){
@@ -78,7 +78,7 @@ show:true
         weatherDesc:myreq.data
             })
 
-            console.log(this.state.weatherDesc[0])
+            console.log(this.state.weatherDesc[0].date)
           }
           catch
           {
@@ -157,16 +157,9 @@ if(! this.state.weatherDesc)
     </div> */}
 
 
-    <div>
-
-<p>
-
-</p>
-      
-        
-
-        
-    </div>
+<Weather
+date={this.state.weatherDesc}
+/>
 
 {/* {this.state.show &&<Card border="warning" style={{ width: '18rem' }}>
     <Card.Header>info</Card.Header>
