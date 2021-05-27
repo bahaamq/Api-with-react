@@ -24,16 +24,16 @@ class Weather extends React.Component{
     </tr>
   </thead>
   <tbody>
-    {this.props.date.map((item,index)=>{
-            return(
+    {this.props.date.map((item,index)=>(
+           
       
-              <tr>
+              <tr key={index}>
                 <td>{index+1}</td>
                 <td>{item.date}</td>
                 <td>{item.description}</td>
               </tr>
 
-            )})}
+            ))}
             </tbody>
 </Table>
 </>
