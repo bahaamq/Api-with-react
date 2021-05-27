@@ -5,6 +5,8 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Card from 'react-bootstrap/Card'
 import Weather from './Weather.js'
+import Movie from './Movie.js'
+
 class Map extends React.Component{
 
     constructor(props){
@@ -20,7 +22,7 @@ class Map extends React.Component{
        showMapImg:false,
 errorMsg:false   ,
 weatherDesc:[],
-
+MovieDesc:[]
 
         }
       }
@@ -43,7 +45,47 @@ showMap=(e)=>{
 
   }
 
+getWeather=async()=>{
+  try
+  {
+    let BASE_URL = process.env.REACT_APP_SERVER;
 
+    const apiUrl=`${BASE_URL}/weather?low=${this.state.low}&lon=${this.state.lon}&searchQuery=${this.state.showName}`;
+console.log(apiUrl)
+    let myreq= await axios.get(apiUrl)
+     this.setState({
+      weatherDesc:myreq.data
+          })
+
+          console.log(this.state.weatherDesc[0].date)
+        }
+        catch
+        {
+          console.log('err')
+
+        }
+}
+
+getMovie=async()=>{
+  try
+  {
+    let BASE_URL = process.env.REACT_APP_SERVER;
+
+    const apiUrl=`${BASE_URL}/movies?searchQuery=${this.state.showName}`;
+console.log(apiUrl)
+    let myreq= await axios.get(apiUrl)
+     this.setState({
+      MovieDesc:myreq.data
+          })
+
+          console.log(this.state.MovieDesc[0])
+        }
+        catch
+        {
+          console.log('err')
+
+        }
+}
 sendData=async(e)=>{
 
     e.preventDefault();
@@ -68,33 +110,25 @@ show:true
 
       
 
-    try
-    {
-      let BASE_URL = process.env.REACT_APP_SERVER;
-
-      const apiUrl=`${BASE_URL}/weather?low=${this.state.low}&lon=${this.state.lon}&searchQuery=${this.state.showName}`;
-console.log(apiUrl)
-      let myreq= await axios.get(apiUrl)
-       this.setState({
-        weatherDesc:myreq.data
-            })
-
-            console.log(this.state.weatherDesc[0].date)
-          }
-          catch
-          {
-            console.log('err')
-
-          }
+   
     }
-
+  
     catch
     {
     console.log('sasd');
     this.setState({
 errorMsg:true
     })
-    }}
+    }
+  
+    //Calling getWeather which responsible to send get request to server 
+    //to retrive weather info(date,Descriptiom)
+        //After Being sure that the query is ready by executing sendData function
+
+    this.getWeather()
+
+    this.getMovie()
+  }
 
 
 
@@ -136,6 +170,10 @@ if(! this.state.weatherDesc)
 
 <Weather
 date={this.state.weatherDesc}
+/>
+
+<Movie
+moviesData={this.state.MovieDesc}
 />
      
 <Card>
